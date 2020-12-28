@@ -1,5 +1,6 @@
 package jpabook.jpashop;
 
+import jpabook.jpashop.domain.Movie;
 import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderItem;
 
@@ -19,8 +20,10 @@ public class JpaMain {
 
         try {
 
-            Order order = new Order();
-            order.addOrderItem(new OrderItem());
+            Movie movie = new Movie();
+            movie.setActor("aaa");
+            movie.setDirector("bbb");
+            em.persist(movie);
 
             tx.commit();
         } catch (Exception e) {
