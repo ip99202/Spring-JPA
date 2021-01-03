@@ -13,7 +13,7 @@
 
 주의사항 - 외래키가 있는 쪽을 연관관계의 주인으로 설정  
 
-### MEMBER와 ORDERS는 일대다 양방향 매핑  
+#### MEMBER와 ORDERS는 일대다 양방향 매핑  
 
 Member.java
 ```java
@@ -46,7 +46,7 @@ public class Order extends BaseEntity {
 }
 ```
 
-### DELEVERY와 ORDERS는 일대일 양방향 매핑  
+#### DELEVERY와 ORDERS는 일대일 양방향 매핑  
 
 Delevery.java
 ```java
@@ -82,7 +82,7 @@ public class Order {
 }
 ```
 
-### ORDER_ITEM과 ITEM은 다대일 단방향 매핑  
+#### ORDER_ITEM과 ITEM은 다대일 단방향 매핑  
 
 OrderItem.java
 ```java
@@ -117,7 +117,7 @@ public class Item {
 }
 ```
 
-### CATEGORY와 ITEM은 다대다 양방향 매핑  
+#### CATEGORY와 ITEM은 다대다 양방향 매핑  
 
 Category.java
 ```java
