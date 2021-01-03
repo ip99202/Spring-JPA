@@ -1,12 +1,15 @@
-# Spring-JPA-실습
+# Spring-JPA-정리
 
 위 코드는 김영한님의 강의 [자바 ORM 표준 JPA 프로그래밍 기본편](https://www.inflearn.com/course/ORM-JPA-Basic/dashboard)을 바탕으로 작성된 것입니다.
+<br>
 
 ## JPA 영속성 컨텍스트
 [영속성 컨텍스트](https://ip99202.github.io/posts/JPA-%EC%98%81%EC%86%8D%EC%84%B1-%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8/)
+<br><br>
 
 ## JPA 데이터베이스 스키마 자동생성
 [스키마 자동생성](https://ip99202.github.io/posts/JPA-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4-%EC%8A%A4%ED%82%A4%EB%A7%88-%EC%9E%90%EB%8F%99%EC%83%9D%EC%84%B1/)
+<br><br>
 
 ## 다양한 연관관계 매핑
 <img width=500px src="https://user-images.githubusercontent.com/52627952/103472912-4885cb00-4dd6-11eb-9d61-3201c196d530.png">  
@@ -45,6 +48,7 @@ public class Order extends BaseEntity {
     private Member member;
 }
 ```
+<br>
 
 #### DELEVERY와 ORDERS는 일대일 양방향 매핑  
 
@@ -81,6 +85,7 @@ public class Order {
     private List<OrderItem> orderItems = new ArrayList<>();
 }
 ```
+<br>
 
 #### ORDER_ITEM과 ITEM은 다대일 단방향 매핑  
 
@@ -116,6 +121,7 @@ public class Item {
 
 }
 ```
+<br>
 
 #### CATEGORY와 ITEM은 다대다 양방향 매핑  
 
@@ -163,7 +169,7 @@ public class Item {
 
 **다대다 관계는 실전에서 쓰이지 않는다**  
 다대다 -> 일대다와 다대일로 분리해서 사용!
-
+<br><br>
 
 ## 상속관계 매핑
 
@@ -226,7 +232,7 @@ public class Album extends Item {
     }
 }
 ```
-
+<br><br>
 
 ## MappedSuperclass - 매핑 정보 상속
 
@@ -265,3 +271,6 @@ public abstract class Item extends BaseEntity { // BaseEntity를 상속하여 �
     private List<Category> categories = new ArrayList<>();
 }
 ```
+<br><br>
+
+## 즉시 로딩과 지연 로딩
