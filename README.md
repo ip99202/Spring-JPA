@@ -274,3 +274,90 @@ public abstract class Item extends BaseEntity { // BaseEntity를 상속하여 �
 <br><br>
 
 ## 즉시 로딩과 지연 로딩
+JPA에서 테이블 간 연관 관계는 객체의 참조에 의해 이루어진다.  
+서비스가 커지고 복잡해질수록 참조하는 객체가 많아지는데  
+이렇게 객체가 커지면 DB에서 연관된 객체까지 한꺼번에 가져오는 것은 엄청난 부담이된다.  
+그렇기 때문에 JPA는 참조하는 객체들의 데이터를 가져오는 시점을 정할 수 있다.  
+이것이 Fetch Type이다.  
+
+Fetch Type에는 즉시 로딩인 EAGER와 지연로딩인 LAZY가 있다.  
+
+<img width=500px src="https://user-images.githubusercontent.com/52627952/103505290-391d8500-4e9d-11eb-863f-f6ecb3844990.png">  
+
+위의 예시에서 지연 로딩을 사용하면 member를 조회할 때 team에는 실제 값이 아닌 프록시가 들어가고  
+team을 조회할 때 다시 쿼리를 날려 team을 가져오게 된다.  
+<br>
+
+<img width=500px src="https://user-images.githubusercontent.com/52627952/103505230-1be8b680-4e9d-11eb-8542-023b61bd18a2.png">  
+
+즉시 로딩을 사용하게 되면 member를 조회할 때에도 join을 사용하여 team을 같이 가져오게 된다.  
+
+**실전에서는 가급적 지연로딩만 사용한다.**  
+**즉시 로딩은 JPQL에서 N+1문제가 발생한다.**  
+@ManyToOne과 @OneToOne은 기본이 즉시 로딩이다.  
+@OneToMany와 @ManyToMany는 기본이 지연 로딩이다.  
+
+
+Category.java
+```java
+@Entity
+public class Category extends BaseEntity {
+
+    @Id @GeneratedValue
+    private Long id;
+
+    private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY) //***
+    @JoinColumn(name = "PARENT_ID")
+    private Category parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Category> child = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "CATEGORY_ITEM",
+            joinColumns = @JoinColumn(name = "CATEGORY_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ITEM_ID")
+    )
+    private List<Item> items = new ArrayList<>();
+}
+
+```
+<br><br>
+
+
+## 영속성 전이 : CASCADE
+특정 Entity를 영속 상태로 만들 때 연관된 Entity도 함께 영속 상태로 만들고 싶을 때 사용  
+부모 Entity를 저장할 때 자식 Entity도 같이 저장한다.  
+
+영속성 전이는 연관관계를 매핑하는 것과 관련이 없다.  
+단지 연관된 Entity를 함께 저장하는 편리함을 제공  
+
+Order.java
+```java
+@Entity
+@Table(name = "ORDERS")
+public class Order extends BaseEntity {
+
+    @Id @GeneratedValue
+    @Column(name = "ORDER_ID")
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) //***
+    @JoinColumn(name = "DELIVERY_ID")
+    private Delivery delivery;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //***
+    private List<OrderItem> orderItems = new ArrayList<>();
+
+    private LocalDateTime orderDate;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+}
+```
